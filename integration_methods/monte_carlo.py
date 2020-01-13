@@ -3,14 +3,11 @@ import numpy as np
 import random 
 import math 
 
-from IPython.display import clear_output
-
 class Monte_Carlo():
   def __init__(self, f, x_0, x_n):
     self.f = f
     self.x_0 = x_0
     self.x_n = x_n
-    self.iterations = iterations
     
   def random_number(self, min, max):
       range = max - min

@@ -20,25 +20,26 @@ class Trapezes():
   # borne inférieure : x_0
   # borne supérieure : x_n
   # en pratique on itère sur la méthode 
-  # et on diminue le pas h progressivement
+  # et on diminue le pas h progressivement (de 1/2 à chaque itération)
   # k : itération en cours
   def trapezes(self, old_integral, k):
     # si k = 1, le nombre de trapèzes serait de 1 (en effet, 2^0 = 1)
     if k == 1: 
-      return ((self.f(self.x_0) + self.f(self.x_n)) * ((x_n - x_0)) / 2)
+      # Aire d'un trapèze
+      h = (self.x_n - self.x_0)
+      return (self.f(self.x_0) + self.f(self.x_n)) * h / 2
 
     # nombre de trapèzes
     n = int(math.pow(2, k-1))
     # intervalle h
-    h = (x_n - x_0) / n
+    h = (self.x_n - self.x_0) / n
 
-    sum = 0
-    # on démarre à x_1
-    x = x_0 + h
-    for i in range(n):
-      sum += f(x)
-      x += h
-    return old_integral/2 + (h/2) * sum
+    sum = 1/2 * (self.f(self.x_0) + self.f(self.x_n))
+    for i in range(1, n):
+      x_i = self.x_0 + (i * h)
+      sum += self.f(x_i)
+
+    return h * sum 
   
   # N : nombre de dimensions
   def integrate(self, N, iterations, precision):

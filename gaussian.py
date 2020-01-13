@@ -5,7 +5,7 @@ from integration_methods.monte_carlo import Monte_Carlo
 import math
 
 # precision de l'évaluation numérique de l'intégrale (trapèzes)
-TRESHOLD_PRECISION = 1e-6
+TRESHOLD_PRECISION = 1e-25
 DIMENSIONS = [1, 2, 10, 15]
 X_0 = -3 
 X_N = 3
@@ -22,21 +22,21 @@ def gaussian_theo(N):
 def evaluate_gaussian_integral():
   for dimension in DIMENSIONS:
 
+    print(f"Valeur théorique approximative: {gaussian_theo(dimension)}")
+
     # trapèzes
     gaussian_trapezes = Trapezes(gaussian, X_0, X_N)
     gaussian_trapezes_value = gaussian_trapezes.integrate(N = dimension, iterations = 10000, precision = TRESHOLD_PRECISION)
     print(f"Valeur de la gaussienne à {dimension} dimension (trapèzes): {gaussian_trapezes_value}")
 
-    # romberg
-    gaussian_romberg = Romberg(gaussian, X_0, X_N)
-    gaussian_romberg_value = gaussian_romberg.integrate(precision = TRESHOLD_PRECISION)
-    print(f"Valeur de la gaussienne à {dimension} dimension (romberg): {gaussian_romberg_value}")
+    # # romberg
+    # gaussian_romberg = Romberg(gaussian, X_0, X_N)
+    # gaussian_romberg_value = gaussian_romberg.integrate(precision = TRESHOLD_PRECISION)
+    # print(f"Valeur de la gaussienne à {dimension} dimension (romberg): {gaussian_romberg_value}")
 
-    # monte-carlo
-    gaussian_monte_carlo = Monte_Carlo(gaussian, X_0, X_N)
-    gaussian_monte_carlo_value = gaussian_monte_carlo.integrate(iterations = 10000)
-    print(f"Valeur de la gaussienne à {dimension} dimension (monte-carlo): {gaussian_monte_carlo_value}")
-    
-    print(f"Valeur théorique approximative: {gaussian_theo(dimension)}")
+    # # monte-carlo
+    # gaussian_monte_carlo = Monte_Carlo(gaussian, X_0, X_N)
+    # gaussian_monte_carlo_value = gaussian_monte_carlo.integrate(iterations = 10000)
+    # print(f"Valeur de la gaussienne à {dimension} dimension (monte-carlo): {gaussian_monte_carlo_value}")
 
-
+evaluate_gaussian_integral()
