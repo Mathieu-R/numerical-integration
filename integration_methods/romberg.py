@@ -29,7 +29,7 @@ class Romberg():
   def richardson_extrapolation(self, I_prev, I_current, k):
     return ((2**k * I_current) - I_prev) / (2**k - 1)
 
-  def integrate(self, dimension, iterations, precision):
+  def integrate(self, iterations, precision):
     # R(n, m)
     self.map = np.zeros((iterations, iterations))
 

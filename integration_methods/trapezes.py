@@ -42,7 +42,7 @@ class Trapezes():
     return h * sum 
   
   # N : nombre de dimensions
-  def integrate(self, dimension, iterations, precision):
+  def integrate(self, iterations, precision):
     new_integral = 0
     for k in range(1, iterations):
       old_integral = new_integral
