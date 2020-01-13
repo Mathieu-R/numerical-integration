@@ -22,7 +22,7 @@ class Trapezes():
   # en pratique on itère sur la méthode 
   # et on diminue le pas h progressivement (de 1/2 à chaque itération)
   # k : itération en cours
-  def trapezes(self, old_integral, k):
+  def trapezes(self, k):
     # si k = 1, le nombre de trapèzes serait de 1 (en effet, 2^0 = 1)
     if k == 1: 
       # Aire d'un trapèze
@@ -42,11 +42,11 @@ class Trapezes():
     return h * sum 
   
   # N : nombre de dimensions
-  def integrate(self, N, iterations, precision):
+  def integrate(self, dimension, iterations, precision):
     new_integral = 0
     for k in range(1, iterations):
       old_integral = new_integral
-      new_integral = self.trapezes(old_integral, k)
+      new_integral = self.trapezes(k)
       if abs(old_integral - new_integral) < precision and k > 1:
         return new_integral, k
         break

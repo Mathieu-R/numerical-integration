@@ -1,3 +1,4 @@
+import numpy as np
 import math
 
 class Romberg():
@@ -5,36 +6,51 @@ class Romberg():
     self.f = f
     self.x_0 = x_0
     self.x_n = x_n
-  
-  def integrate(self, precision):
-    r = [trapezes(0, 1)]
-    for k in range(2, 20):
-      r_new = [trapezes(r[0], k)]
-      for i in range(1, k):
-        r_new.append(richardson_extrapolation(r[i-1], r_new[i-1], 2*i))
-      
-      if abs(r[-1] - r_new[-1] < precision):
-        return r[-1], k
-      
-      r = r_new
 
-  def richardson_extrapolation(self):
-    pass
-
-  def trapezes(self, old_integral, k):
+  def trapezes(self, k):
     # si k = 1, le nombre de trapèzes serait de 1 (en effet, 2^0 = 1)
     if k == 1: 
-      return ((self.f(self.x_0) + self.f(self.x_n)) * ((x_n - x_0)) / 2)
+      # Aire d'un trapèze
+      h = (self.x_n - self.x_0)
+      return (self.f(self.x_0) + self.f(self.x_n)) * h / 2
 
     # nombre de trapèzes
     n = int(math.pow(2, k-1))
     # intervalle h
-    h = (x_n - x_0) / n
+    h = (self.x_n - self.x_0) / n
 
-    sum = 0
-    # on démarre à x_1
-    x = x_0 + h
-    for i in range(n):
-      sum += f(x)
-      x += h
-    return old_integral/2 + (h/2) * sum
+    sum = 1/2 * (self.f(self.x_0) + self.f(self.x_n))
+    for i in range(1, n):
+      x_i = self.x_0 + (i * h)
+      sum += self.f(x_i)
+
+    return h * sum 
+
+  def richardson_extrapolation(self, I_prev, I_current, k):
+    return ((2**k * I_current) - I_prev) / (2**k - 1)
+
+  def integrate(self, dimension, iterations, precision):
+    # R(n, m)
+    self.map = np.zeros((iterations, iterations))
+
+    """
+    iterations = 3
+       j
+       __________________
+    i | trap   x    x    |
+      | trap rich   x    |
+      | trap rich approx |  
+       ------------------
+    """
+    for i in range(1, iterations):
+      i_prime = i - 1
+      # Méthode des trapèzes
+      self.map[i_prime, 0] = self.trapezes(i)
+      for j in range(1, i):
+        # Extrapolation de Richardson
+        self.map[i_prime, j] = self.richardson_extrapolation(self.map[i_prime-1, j-1], self.map[i_prime, j-1], 2*j)
+      
+      if abs(self.map[i_prime - 1, i_prime - 1] - self.map[i_prime, i_prime]) < precision:
+        return self.map[i_prime, i_prime], i
+        break
+    
